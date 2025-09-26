@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { Outlet } from 'react-router-dom';
+// import { Outlet } from 'react-router-dom';
 import styles from './app-header.module.css';
 import { TAppHeaderUIProps } from './type';
 import {
@@ -36,6 +36,6 @@ export const AppHeaderUI: FC<TAppHeaderUIProps> = ({ userName }) => (
         </div>
       </nav>
     </header>
-    <Outlet />
+    {/* <Outlet /> */}
   </>
 );
