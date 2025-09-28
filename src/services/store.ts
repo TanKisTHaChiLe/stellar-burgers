@@ -7,8 +7,8 @@ import {
 } from 'react-redux';
 
 import ingredientsSlice from './ingredientsSlice';
-
-const rootReducer = combineSlices(ingredientsSlice); // Заменить на импорт настоящего редьюсера
+import burgerConstructorSlice from './burgerConstructorSlice';
+const rootReducer = combineSlices(ingredientsSlice, burgerConstructorSlice);
 
 const store = configureStore({
   reducer: rootReducer,
