@@ -15,7 +15,9 @@ import {
   useMatch,
   useNavigate
 } from 'react-router-dom';
-
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from '../../services/store';
+import { getState, fetchIngredients } from '../../services/ingredientsSlice';
 import '../../index.css';
 import styles from './app.module.css';
 
@@ -23,11 +25,21 @@ import { AppHeader, Modal, OrderInfo, IngredientDetails } from '@components';
 
 function App() {
   const location = useLocation();
-  const backgroundLocation = location.state?.backgoundLocation;
+  const backgroundLocation = location.state?.background;
+  // console.log(backgroundLocation);
+  // console.log(location || backgroundLocation);
   const matchFeedId = useMatch('/feed/:number')?.params.number;
   const matchProfileOrdersId = useMatch('/profile/orders/:number')?.params
     .number;
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { ingredients, isLoading } = useSelector(getState);
+
+  useEffect(() => {
+    dispatch(fetchIngredients());
+  }, [dispatch]);
+
+  // console.log(ingredients);
 
   const onCloseModal = () => {
     navigate(-1);
@@ -36,7 +48,7 @@ function App() {
   return (
     <div className={styles.app}>
       <AppHeader />
-      <Routes location={location || backgroundLocation}>
+      <Routes location={backgroundLocation || location}>
         <Route path='/' element={<ConstructorPage />} />
 
         <Route path='/ingredients'>
