@@ -27,7 +27,12 @@ export const fetchOrderBurger = createAsyncThunk(
 const orderSlice = createSlice({
   name: 'order',
   initialState,
-  reducers: {},
+  reducers: {
+    clearModalData: (state) => {
+      state.orderModalData = null;
+      state.orderRequest = false;
+    }
+  },
   selectors: {
     getOrderState: (state) => state
   },
@@ -49,4 +54,5 @@ const orderSlice = createSlice({
 });
 
 export const { getOrderState } = orderSlice.selectors;
+export const { clearModalData } = orderSlice.actions;
 export default orderSlice;

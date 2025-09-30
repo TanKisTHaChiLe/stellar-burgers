@@ -4,15 +4,11 @@ import { TConstructorIngredient, TIngredient } from '@utils-types';
 interface burgerIngredients {
   constructorIngridients: TConstructorIngredient[];
   bun: TConstructorIngredient | null;
-  orderRequest: boolean;
-  orderModalData: null;
 }
 
 const initialState: burgerIngredients = {
   constructorIngridients: [],
-  bun: null,
-  orderRequest: false,
-  orderModalData: null
+  bun: null
 };
 
 const burgerConstructorSlice = createSlice({
@@ -50,6 +46,10 @@ const burgerConstructorSlice = createSlice({
       const { from, to } = action.payload;
       const [movedIngredient] = state.constructorIngridients.splice(from, 1);
       state.constructorIngridients.splice(to, 0, movedIngredient);
+    },
+    clearConstructorItems: (state) => {
+      state.bun = null;
+      state.constructorIngridients = [];
     }
   },
   selectors: {
@@ -64,7 +64,12 @@ const burgerConstructorSlice = createSlice({
   }
 });
 
-export const { addIngridient, removeIngridient, addBun, moveIngredient } =
-  burgerConstructorSlice.actions;
+export const {
+  addIngridient,
+  removeIngridient,
+  addBun,
+  moveIngredient,
+  clearConstructorItems
+} = burgerConstructorSlice.actions;
 export const { getState, getPrice, getBun } = burgerConstructorSlice.selectors;
 export default burgerConstructorSlice;
