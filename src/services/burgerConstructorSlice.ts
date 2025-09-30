@@ -1,6 +1,5 @@
-import { PayloadAction, createSlice, current, nanoid } from '@reduxjs/toolkit';
+import { PayloadAction, createSlice, nanoid } from '@reduxjs/toolkit';
 import { TConstructorIngredient, TIngredient } from '@utils-types';
-import { act } from 'react-dom/test-utils';
 
 interface burgerIngredients {
   constructorIngridients: TConstructorIngredient[];

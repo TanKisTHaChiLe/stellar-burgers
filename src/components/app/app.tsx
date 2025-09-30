@@ -39,8 +39,6 @@ function App() {
     dispatch(fetchIngredients());
   }, [dispatch]);
 
-  // console.log(ingredients);
-
   const onCloseModal = () => {
     navigate(-1);
   };
