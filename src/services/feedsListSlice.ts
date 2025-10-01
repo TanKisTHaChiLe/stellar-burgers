@@ -3,13 +3,13 @@ import { getFeedsApi } from '@api';
 import { TOrdersData } from '@utils-types';
 
 interface FeedsState {
-  feeds: TOrdersData | null;
+  feed: TOrdersData | null;
   isLoading: boolean;
   error: string | null;
 }
 
 const initialState: FeedsState = {
-  feeds: null,
+  feed: null,
   isLoading: false,
   error: null
 };
@@ -37,7 +37,7 @@ const feedsSlice = createSlice({
       })
       .addCase(fetchFeeds.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.feeds = action.payload;
+        state.feed = action.payload;
       });
   }
 });

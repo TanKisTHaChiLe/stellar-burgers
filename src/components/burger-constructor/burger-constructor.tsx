@@ -24,9 +24,9 @@ export const BurgerConstructor: FC = () => {
         (item) => item._id
       );
       const getNameBuns = constructorItems.bun._id;
-      console.log([...getNameIngredients, getNameBuns, getNameBuns]);
+      // console.log([...getNameIngredients, getNameBuns, getNameBuns]);
       dispatch(
-        fetchOrderBurger([...getNameIngredients, getNameBuns, getNameBuns])
+        fetchOrderBurger([getNameBuns, ...getNameIngredients, getNameBuns])
       );
     }
   };

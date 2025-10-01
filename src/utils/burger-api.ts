@@ -106,13 +106,8 @@ type TNewOrderResponse = TServerResponse<{
   name: string;
 }>;
 
-export const orderBurgerApi = (data: string[]) => {
-  console.log(
-    JSON.stringify({
-      ingredients: data
-    })
-  );
-  return fetchWithRefresh<TNewOrderResponse>(`${URL}/orders`, {
+export const orderBurgerApi = (data: string[]) =>
+  fetchWithRefresh<TNewOrderResponse>(`${URL}/orders`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json;charset=utf-8',
@@ -125,7 +120,6 @@ export const orderBurgerApi = (data: string[]) => {
     if (data?.success) return data;
     return Promise.reject(data);
   });
-};
 
 type TOrderResponse = TServerResponse<{
   orders: TOrder[];
