@@ -13,16 +13,6 @@ export const OrderInfo: FC = () => {
   const orderData = useSelector(getFeedsState).feed?.orders.find(
     (item) => item.number + '' === params.number
   );
-  // console.log(orderData);
-  // const orderData = {
-  //   createdAt: '',
-  //   ingredients: [],
-  //   _id: '',
-  //   status: '',
-  //   name: '',
-  //   updatedAt: 'string',
-  //   number: 0
-  // };
 
   const { ingredients } = useSelector(getState);
 
@@ -60,7 +50,7 @@ export const OrderInfo: FC = () => {
       0
     );
     const status = orderData.status;
-    console.log(status);
+    // console.log(status);
     return {
       ...orderData,
       status,

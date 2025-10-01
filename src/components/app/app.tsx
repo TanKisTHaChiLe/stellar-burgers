@@ -20,7 +20,7 @@ import { useDispatch, useSelector } from '../../services/store';
 import { getState, fetchIngredients } from '../../services/ingredientsSlice';
 import '../../index.css';
 import styles from './app.module.css';
-
+import { zeroPadLeft } from '../../utils/utils';
 import { AppHeader, Modal, OrderInfo, IngredientDetails } from '@components';
 
 function App() {
@@ -28,7 +28,8 @@ function App() {
   const backgroundLocation = location.state?.background;
   // console.log(backgroundLocation);
   // console.log(location || backgroundLocation);
-  const matchFeedId = useMatch('/feed/:number')?.params.number;
+  const matchFeedId = useMatch('/feed/:number')?.params.number || '';
+  const zeroPadMatchFeedId = zeroPadLeft(matchFeedId);
   const matchProfileOrdersId = useMatch('/profile/orders/:number')?.params
     .number;
   const navigate = useNavigate();
@@ -89,7 +90,7 @@ function App() {
           <Route
             path='/feed/:number'
             element={
-              <Modal onClose={onCloseModal} title={`${matchFeedId}`}>
+              <Modal onClose={onCloseModal} title={`${zeroPadMatchFeedId}`}>
                 <OrderInfo />
               </Modal>
             }
