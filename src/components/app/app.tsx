@@ -26,8 +26,6 @@ import { AppHeader, Modal, OrderInfo, IngredientDetails } from '@components';
 function App() {
   const location = useLocation();
   const backgroundLocation = location.state?.background;
-  // console.log(backgroundLocation);
-  // console.log(location || backgroundLocation);
   const matchFeedId = useMatch('/feed/:number')?.params.number || '';
   const zeroPadMatchFeedId = zeroPadLeft(matchFeedId);
   const matchProfileOrdersId = useMatch('/profile/orders/:number')?.params
