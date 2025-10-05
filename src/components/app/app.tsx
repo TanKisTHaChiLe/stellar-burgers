@@ -22,6 +22,7 @@ import '../../index.css';
 import styles from './app.module.css';
 import { zeroPadLeft } from '../../utils/utils';
 import { AppHeader, Modal, OrderInfo, IngredientDetails } from '@components';
+import { checkUserAuth } from '../../services/userSlice';
 
 function App() {
   const location = useLocation();
@@ -36,6 +37,7 @@ function App() {
 
   useEffect(() => {
     dispatch(fetchIngredients());
+    dispatch(checkUserAuth());
   }, [dispatch]);
 
   const onCloseModal = () => {
@@ -56,7 +58,7 @@ function App() {
           <Route path=':number' element={<OrderInfo />} />
         </Route>
 
-        <Route path='/login' element={<ProtectedRoute />}>
+        <Route path='/login' element={<ProtectedRoute onlyUnAuth />}>
           <Route index element={<Login />} />
         </Route>
 
