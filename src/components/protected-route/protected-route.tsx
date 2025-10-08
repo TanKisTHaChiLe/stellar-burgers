@@ -13,7 +13,7 @@ export const ProtectedRoute = ({ onlyUnAuth = false }: ProtectedRouteProps) => {
   const location = useLocation();
 
   if (!isAuthChecked) {
-    console.log(isAuthChecked);
+    // console.log(isAuthChecked);
     return <Preloader />;
   }
 

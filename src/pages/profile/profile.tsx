@@ -20,6 +20,8 @@ export const Profile: FC = () => {
     }));
   }, [user]);
 
+  // console.log(formValue, user);
+
   const isFormChanged =
     formValue.name !== user?.name ||
     formValue.email !== user?.email ||

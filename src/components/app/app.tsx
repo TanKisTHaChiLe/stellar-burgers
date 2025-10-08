@@ -38,7 +38,8 @@ function App() {
   useEffect(() => {
     dispatch(fetchIngredients());
     dispatch(checkUserAuth());
-  }, [dispatch]);
+    // console.log('app');
+  }, []);
 
   const onCloseModal = () => {
     navigate(-1);
@@ -62,7 +63,7 @@ function App() {
           <Route index element={<Login />} />
         </Route>
 
-        <Route path='/register' element={<ProtectedRoute />}>
+        <Route path='/register' element={<ProtectedRoute onlyUnAuth />}>
           <Route index element={<Register />} />
         </Route>
 

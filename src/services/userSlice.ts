@@ -47,7 +47,7 @@ const userSlice = createSlice({
       state.user = null;
     },
     setUser: (state, action) => {
-      state.user = action.payload;
+      state.user = action.payload.user;
     }
   },
   selectors: {
@@ -119,7 +119,10 @@ export const checkUserAuth = createAsyncThunk(
   async (_, { dispatch }) => {
     if (getCookie('accessToken')) {
       getUserApi()
-        .then((user) => dispatch(setUser(user)))
+        .then((user) => {
+          // console.log(user);
+          dispatch(setUser(user));
+        })
         .finally(() => {
           dispatch(authChecked());
         });
