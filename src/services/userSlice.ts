@@ -1,12 +1,19 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import { getUserApi, loginUserApi, logoutApi } from '@api';
+import {
+  getUserApi,
+  loginUserApi,
+  logoutApi,
+  registerUserApi,
+  TRegisterData
+} from '@api';
 import { TLoginData, TAuthResponse } from '@api';
-import { deleteCookie, getCookie } from '../utils/cookie';
+import { deleteCookie, getCookie, setCookie } from '../utils/cookie';
+import { TUser } from '@utils-types';
 
 interface loginUser {
   isAuthChecked: boolean;
   isAuthenticated: boolean;
-  data: TAuthResponse | null;
+  user: TUser | null;
   loginUserRequest: boolean;
   loginUserError: string | null;
 }
@@ -14,14 +21,19 @@ interface loginUser {
 const initialState: loginUser = {
   isAuthChecked: false,
   isAuthenticated: false,
-  data: null,
+  user: null,
   loginUserRequest: false,
   loginUserError: null
 };
 
 export const fetchLogin = createAsyncThunk(
   'user/login',
-  async (data: TLoginData) => await loginUserApi(data)
+  async (data: TLoginData) =>
+    loginUserApi(data).then((data) => {
+      localStorage.setItem('refreshToken', data.refreshToken);
+      setCookie('accessToken', data.accessToken);
+      return data;
+    })
 );
 
 const userSlice = createSlice({
@@ -32,13 +44,16 @@ const userSlice = createSlice({
       state.isAuthChecked = true;
     },
     userLogout: (state) => {
-      state.data = null;
+      state.user = null;
+    },
+    setUser: (state, action) => {
+      state.user = action.payload;
     }
   },
   selectors: {
     getUserState: (state) => state,
     isAuthCheckedSelector: (state) => state.isAuthChecked,
-    userDataSelector: (state) => state.data
+    getUserSelector: (state) => state.user
   },
   extraReducers: (build) => {
     build
@@ -53,14 +68,40 @@ const userSlice = createSlice({
       })
       .addCase(fetchLogin.fulfilled, (state, action) => {
         state.loginUserRequest = false;
-        state.data = action.payload || null;
+        state.user = action.payload.user || null;
+        state.isAuthChecked = true;
+        state.isAuthenticated = true;
+      })
+
+      .addCase(fetchRegister.pending, (state) => {
+        state.loginUserRequest = true;
+        state.loginUserError = null;
+      })
+      .addCase(fetchRegister.rejected, (state, action) => {
+        state.loginUserRequest = false;
+        state.loginUserError = action.error.message || null;
+        state.isAuthChecked = true;
+      })
+      .addCase(fetchRegister.fulfilled, (state, action) => {
+        state.loginUserRequest = false;
+        state.user = action.payload.user || null;
         state.isAuthChecked = true;
         state.isAuthenticated = true;
       });
   }
 });
 
-export const { userLogout, authChecked } = userSlice.actions;
+export const { userLogout, authChecked, setUser } = userSlice.actions;
+
+export const fetchRegister = createAsyncThunk(
+  'user/register',
+  async (data: TRegisterData) =>
+    registerUserApi(data).then((data) => {
+      localStorage.setItem('refreshToken', data.refreshToken);
+      setCookie('accessToken', data.accessToken);
+      return data;
+    })
+);
 
 export const fetchLogout = createAsyncThunk(
   'user/logout',
@@ -77,15 +118,17 @@ export const checkUserAuth = createAsyncThunk(
   'user/checkUserAuth',
   async (_, { dispatch }) => {
     if (getCookie('accessToken')) {
-      getUserApi().finally(() => {
-        dispatch(authChecked());
-      });
+      getUserApi()
+        .then((user) => dispatch(setUser(user)))
+        .finally(() => {
+          dispatch(authChecked());
+        });
     } else {
       dispatch(authChecked());
     }
   }
 );
 
-export const { getUserState, isAuthCheckedSelector, userDataSelector } =
+export const { getUserState, isAuthCheckedSelector, getUserSelector } =
   userSlice.selectors;
 export default userSlice;

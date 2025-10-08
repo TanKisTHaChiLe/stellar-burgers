@@ -25,6 +25,7 @@ const ingredientsSlice = createSlice({
   reducers: {},
   selectors: {
     getState: (state) => state,
+    isLoadingIngredients: (state) => state.isLoading,
     getIngridients: (state) => state.ingredients
   },
   extraReducers: (builder) => {
@@ -44,5 +45,6 @@ const ingredientsSlice = createSlice({
   }
 });
 
-export const { getState, getIngridients } = ingredientsSlice.selectors;
+export const { getState, getIngridients, isLoadingIngredients } =
+  ingredientsSlice.selectors;
 export default ingredientsSlice;

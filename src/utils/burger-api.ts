@@ -82,7 +82,16 @@ export const getIngredientsApi = () =>
     });
 
 export const getFeedsApi = () =>
-  fetch(`${URL}/orders/all`)
+  fetch(`${URL}/orders/all`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      // Добавьте если нужно
+      Accept: 'application/json'
+    },
+    mode: 'cors', // Явно указываем режим CORS
+    credentials: 'include' // Если нужны куки
+  })
     .then((res) => checkResponse<TFeedsResponse>(res))
     .then((data) => {
       if (data?.success) return data;

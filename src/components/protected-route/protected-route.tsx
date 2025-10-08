@@ -1,7 +1,7 @@
 import { useSelector, useDispatch } from '../../services/store';
 import {
   isAuthCheckedSelector,
-  userDataSelector
+  getUserSelector
 } from '../../services/userSlice';
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
 import { ProtectedRouteProps } from './type';
@@ -9,11 +9,11 @@ import { Preloader } from '@ui';
 
 export const ProtectedRoute = ({ onlyUnAuth = false }: ProtectedRouteProps) => {
   const isAuthChecked = useSelector(isAuthCheckedSelector);
-  const user = useSelector(userDataSelector);
+  const user = useSelector(getUserSelector);
   const location = useLocation();
 
   if (!isAuthChecked) {
-    // console.log(isAuthChecked);
+    console.log(isAuthChecked);
     return <Preloader />;
   }
 
