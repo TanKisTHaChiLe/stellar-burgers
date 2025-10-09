@@ -4,13 +4,13 @@ import { TOrder } from '@utils-types';
 import { fetchOrderBurger } from './orderSlice';
 
 interface profileOrdersState {
-  orders: TOrder[] | null;
+  orders: TOrder[];
   isLoading: boolean;
   error: string | null;
 }
 
 const initialState: profileOrdersState = {
-  orders: null,
+  orders: [],
   isLoading: false,
   error: null
 };
@@ -25,7 +25,8 @@ const profileOrdersSlice = createSlice({
   initialState,
   reducers: {},
   selectors: {
-    getProfileOrdersState: (state) => state
+    getProfileOrdersState: (state) => state,
+    getProfileOrders: (state) => state.orders
   },
   extraReducers: (build) => {
     build
@@ -39,10 +40,11 @@ const profileOrdersSlice = createSlice({
       })
       .addCase(fecthProfileOrders.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.orders = action.payload || null;
+        state.orders = action.payload;
       });
   }
 });
 
-export const { getProfileOrdersState } = profileOrdersSlice.selectors;
+export const { getProfileOrdersState, getProfileOrders } =
+  profileOrdersSlice.selectors;
 export default profileOrdersSlice;

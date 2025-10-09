@@ -67,11 +67,11 @@ function App() {
           <Route index element={<Register />} />
         </Route>
 
-        <Route path='/forgot-password' element={<ProtectedRoute />}>
+        <Route path='/forgot-password' element={<ProtectedRoute onlyUnAuth />}>
           <Route index element={<ForgotPassword />} />
         </Route>
 
-        <Route path='/reset-password' element={<ProtectedRoute />}>
+        <Route path='/reset-password' element={<ProtectedRoute onlyUnAuth />}>
           <Route index element={<ResetPassword />} />
         </Route>
 

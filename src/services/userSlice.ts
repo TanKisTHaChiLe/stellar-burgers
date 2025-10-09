@@ -4,7 +4,8 @@ import {
   loginUserApi,
   logoutApi,
   registerUserApi,
-  TRegisterData
+  TRegisterData,
+  updateUserApi
 } from '@api';
 import { TLoginData, TAuthResponse } from '@api';
 import { deleteCookie, getCookie, setCookie } from '../utils/cookie';
@@ -48,6 +49,9 @@ const userSlice = createSlice({
     },
     setUser: (state, action) => {
       state.user = action.payload.user;
+    },
+    setLoginUserRequest: (state, action) => {
+      state.loginUserRequest = action.payload;
     }
   },
   selectors: {
@@ -91,7 +95,8 @@ const userSlice = createSlice({
   }
 });
 
-export const { userLogout, authChecked, setUser } = userSlice.actions;
+export const { userLogout, authChecked, setUser, setLoginUserRequest } =
+  userSlice.actions;
 
 export const fetchRegister = createAsyncThunk(
   'user/register',
@@ -106,10 +111,12 @@ export const fetchRegister = createAsyncThunk(
 export const fetchLogout = createAsyncThunk(
   'user/logout',
   (_, { dispatch }) => {
+    dispatch(setLoginUserRequest(true));
     logoutApi().then(() => {
       localStorage.clear();
       deleteCookie('accessToken');
       dispatch(userLogout());
+      dispatch(setLoginUserRequest(false));
     });
   }
 );
@@ -120,8 +127,10 @@ export const checkUserAuth = createAsyncThunk(
     if (getCookie('accessToken')) {
       getUserApi()
         .then((user) => {
-          // console.log(user);
           dispatch(setUser(user));
+        })
+        .catch((err) => {
+          console.error(err);
         })
         .finally(() => {
           dispatch(authChecked());
@@ -129,6 +138,19 @@ export const checkUserAuth = createAsyncThunk(
     } else {
       dispatch(authChecked());
     }
+  }
+);
+
+export const fetchUpdateUser = createAsyncThunk(
+  'user/update',
+  async (data: TRegisterData, { dispatch }) => {
+    dispatch(setLoginUserRequest(true));
+    updateUserApi(data)
+      .then((data) => dispatch(setUser(data)))
+      .finally(() => {
+        dispatch(authChecked());
+        dispatch(setLoginUserRequest(false));
+      });
   }
 );
 

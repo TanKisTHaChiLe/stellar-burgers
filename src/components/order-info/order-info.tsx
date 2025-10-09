@@ -10,6 +10,9 @@ export const OrderInfo: FC = () => {
   /** TODO: взять переменные orderData и ingredients из стора */
   const params = useParams();
   // console.log(params);
+
+  console.log(params);
+
   const orderData = useSelector(getFeedsState).feed?.orders.find(
     (item) => item.number + '' === params.number
   );
