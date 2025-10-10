@@ -1,7 +1,6 @@
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { getOrdersApi } from '@api';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { TOrder } from '@utils-types';
-import { fetchOrderBurger } from './orderSlice';
+import { fecthProfileOrders } from './actions';
 
 interface profileOrdersState {
   orders: TOrder[];
@@ -15,11 +14,6 @@ const initialState: profileOrdersState = {
   error: null
 };
 
-export const fecthProfileOrders = createAsyncThunk(
-  'get/profileOrders',
-  async () => getOrdersApi()
-);
-
 const profileOrdersSlice = createSlice({
   name: 'orders',
   initialState,
@@ -30,7 +24,7 @@ const profileOrdersSlice = createSlice({
   },
   extraReducers: (build) => {
     build
-      .addCase(fetchOrderBurger.pending, (state) => {
+      .addCase(fecthProfileOrders.pending, (state) => {
         state.error = null;
         state.isLoading = true;
       })

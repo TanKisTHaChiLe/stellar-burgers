@@ -1,23 +1,49 @@
-import { FC, useMemo } from 'react';
+import { FC, useEffect, useMemo } from 'react';
 import { Preloader } from '../ui/preloader';
 import { OrderInfoUI } from '../ui/order-info';
 import { TIngredient } from '@utils-types';
-import { useParams } from 'react-router-dom';
-import { useSelector } from '../../services/store';
-import { getFeedsState } from '../../services/feedsListSlice';
-import { getState } from '../../services/ingredientsSlice';
+import { useLocation, useParams } from 'react-router-dom';
+import { useSelector, useDispatch } from '../../services/store';
+import { fetchOrderByNumber } from '../../services/order/actions';
+import { getFeed } from '../../services/feed/feedsListSlice';
+import { getProfileOrders } from '../../services/profile-orders/profileOrdersListSlice';
+import { getState } from '../../services/ingredients/ingredientsSlice';
 export const OrderInfo: FC = () => {
   /** TODO: взять переменные orderData и ingredients из стора */
-  const params = useParams();
-  // console.log(params);
-
-  console.log(params);
-
-  const orderData = useSelector(getFeedsState).feed?.orders.find(
-    (item) => item.number + '' === params.number
-  );
-
   const { ingredients } = useSelector(getState);
+  const params = useParams();
+  const location = useLocation();
+  const dispatch = useDispatch();
+  // let isProfileOrder = location.pathname.includes('/profile/orders');
+  // const orders = isProfileOrder
+  //   ? useSelector(getProfileOrders)
+  //   : useSelector(getFeed)?.orders;
+
+  // const orderData = orders?.find((item) => item.number + '' === params.number);
+
+  const orderData = useSelector((state) => {
+    let order = state.feeds.feed?.orders.find(
+      (item) => item.number + '' === params.number
+    );
+    if (order) {
+      return order;
+    }
+
+    order = state.orders.orders.find(
+      (item) => item.number + '' === params.number
+    );
+    if (order) {
+      return order;
+    }
+
+    return state.order.currentOrder;
+  });
+
+  useEffect(() => {
+    if (!orderData && params.number) {
+      dispatch(fetchOrderByNumber(+params.number));
+    }
+  });
 
   /* Готовим данные для отображения */
   const orderInfo = useMemo(() => {

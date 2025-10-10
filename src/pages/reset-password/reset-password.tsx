@@ -1,6 +1,6 @@
 import { FC, SyntheticEvent, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { setLoginUserRequest } from '../../services/userSlice';
+import { Navigate, useNavigate } from 'react-router-dom';
+import { setLoginUserRequest } from '../../services/user/userSlice';
 import { useDispatch } from '../../services/store';
 import { resetPasswordApi } from '@api';
 import { ResetPasswordUI } from '@ui-pages';
@@ -18,9 +18,9 @@ export const ResetPassword: FC = () => {
     dispatch(setLoginUserRequest(true));
     resetPasswordApi({ password, token })
       .then(() => {
-        localStorage.removeItem('resetPassword');
-        console.log('navigate');
+        console.log(navigate);
         navigate('/login');
+        localStorage.removeItem('resetPassword');
       })
       .catch((err) => setError(err))
       .finally(() => dispatch(setLoginUserRequest(false)));
@@ -28,7 +28,8 @@ export const ResetPassword: FC = () => {
 
   useEffect(() => {
     if (!localStorage.getItem('resetPassword')) {
-      navigate('/forgot-password', { replace: true });
+      // navigate('/forgot-password', { replace: true });
+      <Navigate to='/forgot-password' replace />;
     }
   }, [navigate]);
 

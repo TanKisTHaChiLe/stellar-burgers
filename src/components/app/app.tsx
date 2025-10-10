@@ -17,28 +17,28 @@ import {
 } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from '../../services/store';
-import { getState, fetchIngredients } from '../../services/ingredientsSlice';
+import { getState } from '../../services/ingredients/ingredientsSlice';
+import { fetchIngredients } from '../../services/ingredients/actions';
 import '../../index.css';
 import styles from './app.module.css';
 import { zeroPadLeft } from '../../utils/utils';
 import { AppHeader, Modal, OrderInfo, IngredientDetails } from '@components';
-import { checkUserAuth } from '../../services/userSlice';
+import { checkUserAuth } from '../../services/user/actions';
 
 function App() {
   const location = useLocation();
   const backgroundLocation = location.state?.background;
   const matchFeedId = useMatch('/feed/:number')?.params.number || '';
   const zeroPadMatchFeedId = zeroPadLeft(matchFeedId);
-  const matchProfileOrdersId = useMatch('/profile/orders/:number')?.params
-    .number;
+  const matchProfileOrdersId =
+    useMatch('/profile/orders/:number')?.params.number || '';
+  const zeroPadMatchProfileOrdersId = zeroPadLeft(matchProfileOrdersId);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { ingredients, isLoading } = useSelector(getState);
 
   useEffect(() => {
     dispatch(fetchIngredients());
     dispatch(checkUserAuth());
-    // console.log('app');
   }, []);
 
   const onCloseModal = () => {
@@ -51,13 +51,11 @@ function App() {
       <Routes location={backgroundLocation || location}>
         <Route path='/' element={<ConstructorPage />} />
 
-        <Route path='/ingredients'>
-          <Route path=':id' element={<IngredientDetails />} />
-        </Route>
+        <Route path='/ingredients' />
+        <Route path='ingredients/:id' element={<IngredientDetails />} />
 
-        <Route path='/feed' element={<Feed />}>
-          <Route path=':number' element={<OrderInfo />} />
-        </Route>
+        <Route path='/feed' element={<Feed />} />
+        <Route path='/feed/:number' element={<OrderInfo />} />
 
         <Route path='/login' element={<ProtectedRoute onlyUnAuth />}>
           <Route index element={<Login />} />
@@ -76,12 +74,10 @@ function App() {
         </Route>
 
         <Route path='/profile' element={<ProtectedRoute />}>
-          <Route path='/profile'>
-            <Route index element={<Profile />} />
-            <Route path='orders' element={<ProfileOrders />}>
-              <Route path=':number' element={<OrderInfo />} />
-            </Route>
-          </Route>
+          <Route index element={<Profile />} />
+
+          <Route path='orders' element={<ProfileOrders />} />
+          <Route path='orders/:number' element={<OrderInfo />} />
         </Route>
 
         <Route path='*' element={<NotFound404 />} />
@@ -107,7 +103,10 @@ function App() {
           <Route
             path='/profile/orders/:number'
             element={
-              <Modal onClose={onCloseModal} title={`${matchProfileOrdersId}`}>
+              <Modal
+                onClose={onCloseModal}
+                title={`${zeroPadMatchProfileOrdersId}`}
+              >
                 <OrderInfo />
               </Modal>
             }

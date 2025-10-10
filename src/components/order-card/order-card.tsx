@@ -1,6 +1,6 @@
 import { FC, memo, useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
-import { getState } from '../../services/ingredientsSlice';
+import { getState } from '../../services/ingredients/ingredientsSlice';
 import { useSelector } from '../../services/store';
 import { OrderCardProps } from './type';
 import { TIngredient } from '@utils-types';
@@ -46,7 +46,7 @@ export const OrderCard: FC<OrderCardProps> = memo(({ order }) => {
   }, [order, ingredients]);
 
   if (!orderInfo) return null;
-  console.log(orderInfo);
+  // console.log(orderInfo);
   return (
     <OrderCardUI
       orderInfo={orderInfo}

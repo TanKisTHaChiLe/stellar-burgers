@@ -1,9 +1,9 @@
 import { FC, SyntheticEvent, useState } from 'react';
 import { RegisterUI } from '@ui-pages';
 import { useDispatch } from '../../services/store';
-import { fetchRegister } from '../../services/userSlice';
+import { fetchRegister } from '../../services/user/actions';
 import { useSelector } from '../../services/store';
-import { getUserState } from '../../services/userSlice';
+import { getUserState } from '../../services/user/userSlice';
 import { Preloader } from '@ui';
 
 export const Register: FC = () => {

@@ -4,10 +4,12 @@ import { FC, useEffect } from 'react';
 import { useSelector, useDispatch } from '../../services/store';
 import {
   getProfileOrders,
-  fecthProfileOrders,
   getProfileOrdersState
-} from '../../services/profileOrdersListSlice';
+} from '../../services/profile-orders/profileOrdersListSlice';
+import { fecthProfileOrders } from '../../services/profile-orders/actions';
 import { Preloader } from '@ui';
+import { Outlet } from 'react-router-dom';
+
 export const ProfileOrders: FC = () => {
   /** TODO: взять переменную из стора */
   const isLoading = useSelector(getProfileOrdersState);
@@ -23,5 +25,9 @@ export const ProfileOrders: FC = () => {
 
   const orders = useSelector(getProfileOrders);
 
-  return <ProfileOrdersUI orders={orders} />;
+  return (
+    <>
+      <ProfileOrdersUI orders={orders} />
+    </>
+  );
 };

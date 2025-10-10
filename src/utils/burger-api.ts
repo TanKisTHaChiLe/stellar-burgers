@@ -71,8 +71,6 @@ type TOrdersResponse = TServerResponse<{
   data: TOrder[];
 }>;
 
-///////////////////////////////////////////////////
-
 export const getIngredientsApi = () =>
   fetch(`${URL}/ingredients`)
     .then((res) => checkResponse<TIngredientsResponse>(res))
@@ -132,8 +130,6 @@ export const getOrderByNumberApi = (number: number) =>
       'Content-Type': 'application/json'
     }
   }).then((res) => checkResponse<TOrderResponse>(res));
-
-////////////////////////////////////////////////
 
 export type TRegisterData = {
   email: string;
