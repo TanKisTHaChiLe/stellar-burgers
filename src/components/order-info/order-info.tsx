@@ -1,21 +1,49 @@
-import { FC, useMemo } from 'react';
+import { FC, useEffect, useMemo } from 'react';
 import { Preloader } from '../ui/preloader';
 import { OrderInfoUI } from '../ui/order-info';
 import { TIngredient } from '@utils-types';
-
+import { useLocation, useParams } from 'react-router-dom';
+import { useSelector, useDispatch } from '../../services/store';
+import { fetchOrderByNumber } from '../../services/order/actions';
+import { getFeed } from '../../services/feed/feedsListSlice';
+import { getProfileOrders } from '../../services/profile-orders/profileOrdersListSlice';
+import { getState } from '../../services/ingredients/ingredientsSlice';
 export const OrderInfo: FC = () => {
   /** TODO: взять переменные orderData и ingredients из стора */
-  const orderData = {
-    createdAt: '',
-    ingredients: [],
-    _id: '',
-    status: '',
-    name: '',
-    updatedAt: 'string',
-    number: 0
-  };
+  const { ingredients } = useSelector(getState);
+  const params = useParams();
+  const location = useLocation();
+  const dispatch = useDispatch();
+  // let isProfileOrder = location.pathname.includes('/profile/orders');
+  // const orders = isProfileOrder
+  //   ? useSelector(getProfileOrders)
+  //   : useSelector(getFeed)?.orders;
 
-  const ingredients: TIngredient[] = [];
+  // const orderData = orders?.find((item) => item.number + '' === params.number);
+
+  const orderData = useSelector((state) => {
+    let order = state.feeds.feed?.orders.find(
+      (item) => item.number + '' === params.number
+    );
+    if (order) {
+      return order;
+    }
+
+    order = state.orders.orders.find(
+      (item) => item.number + '' === params.number
+    );
+    if (order) {
+      return order;
+    }
+
+    return state.order.currentOrder;
+  });
+
+  useEffect(() => {
+    if (!orderData && params.number) {
+      dispatch(fetchOrderByNumber(+params.number));
+    }
+  });
 
   /* Готовим данные для отображения */
   const orderInfo = useMemo(() => {
@@ -50,9 +78,11 @@ export const OrderInfo: FC = () => {
       (acc, item) => acc + item.price * item.count,
       0
     );
-
+    const status = orderData.status;
+    // console.log(status);
     return {
       ...orderData,
+      status,
       ingredientsInfo,
       date,
       total
