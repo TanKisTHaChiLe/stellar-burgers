@@ -19,12 +19,14 @@ export const BurgerConstructor: FC = () => {
     bun: bun,
     ingredients: constructorIngridients
   };
-
+  // console.log(bun);
   const { orderRequest, orderModalData } = useSelector(getOrderState);
 
   const onOrderClick = () => {
+    // console.log(constructorItems.bun, orderRequest);
     if (!constructorItems.bun || orderRequest) return;
     if (!isAuthenticated) {
+      console.log(isAuthenticated);
       navigate('/login', { replace: true, state: { from: location } });
       return;
     }
