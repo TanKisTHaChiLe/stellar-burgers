@@ -72,4 +72,5 @@ export const {
   clearConstructorItems
 } = burgerConstructorSlice.actions;
 export const { getState, getPrice, getBun } = burgerConstructorSlice.selectors;
+export const reducer = burgerConstructorSlice.reducer;
 export default burgerConstructorSlice;
