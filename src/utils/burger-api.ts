@@ -70,7 +70,7 @@ type TFeedsResponse = TServerResponse<{
 type TOrdersResponse = TServerResponse<{
   data: TOrder[];
 }>;
-///////////// это мочим
+/////////////
 export const getIngredientsApi = () =>
   fetch(`${URL}/ingredients`)
     .then((res) => checkResponse<TIngredientsResponse>(res))
