@@ -22,7 +22,7 @@ export const BurgerConstructorUI: FC<BurgerConstructorUIProps> = ({
     {constructorItems.bun ? (
       <div
         className={`${styles.element} mb-4 mr-4`}
-        data-testid={`constructor-ingredient--bun_top`}
+        data-cy={`constructor-ingredient--bun_top`}
       >
         <ConstructorElement
           type='top'
@@ -62,7 +62,7 @@ export const BurgerConstructorUI: FC<BurgerConstructorUIProps> = ({
     {constructorItems.bun ? (
       <div
         className={`${styles.element} mt-4 mr-4`}
-        data-testid='constructor-ingredient--bun_bottom'
+        data-cy='constructor-ingredient--bun_bottom'
       >
         <ConstructorElement
           type='bottom'
@@ -90,6 +90,7 @@ export const BurgerConstructorUI: FC<BurgerConstructorUIProps> = ({
         size='large'
         children='Оформить заказ'
         onClick={onOrderClick}
+        data-cy='submit-order--button'
       />
     </div>
 
