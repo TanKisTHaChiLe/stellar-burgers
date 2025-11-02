@@ -19,12 +19,12 @@ export const BurgerConstructor: FC = () => {
     bun: bun,
     ingredients: constructorIngridients
   };
-
   const { orderRequest, orderModalData } = useSelector(getOrderState);
 
   const onOrderClick = () => {
     if (!constructorItems.bun || orderRequest) return;
     if (!isAuthenticated) {
+      console.log(isAuthenticated);
       navigate('/login', { replace: true, state: { from: location } });
       return;
     }
@@ -32,6 +32,7 @@ export const BurgerConstructor: FC = () => {
       (item) => item._id
     );
     const getNameBuns = constructorItems.bun._id;
+    console.log([getNameBuns, ...getNameIngredients, getNameBuns]);
     dispatch(
       fetchOrderBurger([getNameBuns, ...getNameIngredients, getNameBuns])
     );

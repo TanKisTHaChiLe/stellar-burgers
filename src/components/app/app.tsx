@@ -17,7 +17,6 @@ import {
 } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from '../../services/store';
-import { getState } from '../../services/ingredients/ingredientsSlice';
 import { fetchIngredients } from '../../services/ingredients/actions';
 import '../../index.css';
 import styles from './app.module.css';

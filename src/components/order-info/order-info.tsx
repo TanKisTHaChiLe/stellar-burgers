@@ -5,8 +5,6 @@ import { TIngredient } from '@utils-types';
 import { useLocation, useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from '../../services/store';
 import { fetchOrderByNumber } from '../../services/order/actions';
-import { getFeed } from '../../services/feed/feedsListSlice';
-import { getProfileOrders } from '../../services/profile-orders/profileOrdersListSlice';
 import { getState } from '../../services/ingredients/ingredientsSlice';
 export const OrderInfo: FC = () => {
   /** TODO: взять переменные orderData и ingredients из стора */
@@ -14,12 +12,6 @@ export const OrderInfo: FC = () => {
   const params = useParams();
   const location = useLocation();
   const dispatch = useDispatch();
-  // let isProfileOrder = location.pathname.includes('/profile/orders');
-  // const orders = isProfileOrder
-  //   ? useSelector(getProfileOrders)
-  //   : useSelector(getFeed)?.orders;
-
-  // const orderData = orders?.find((item) => item.number + '' === params.number);
 
   const orderData = useSelector((state) => {
     let order = state.feeds.feed?.orders.find(
@@ -43,7 +35,8 @@ export const OrderInfo: FC = () => {
     if (!orderData && params.number) {
       dispatch(fetchOrderByNumber(+params.number));
     }
-  });
+  }),
+    [dispatch];
 
   /* Готовим данные для отображения */
   const orderInfo = useMemo(() => {
@@ -79,7 +72,6 @@ export const OrderInfo: FC = () => {
       0
     );
     const status = orderData.status;
-    // console.log(status);
     return {
       ...orderData,
       status,

@@ -5,9 +5,6 @@ type TNewOrderResponse = {
   order: TOrder;
   name: string;
 };
-type TOrderResponse = {
-  orders: TOrder;
-};
 
 interface IOrderState {
   orderRequest: boolean;
