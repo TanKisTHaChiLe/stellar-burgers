@@ -120,6 +120,18 @@ describe('Конструктор бургеров', () => {
       cy.get('[data-cy="modal"]').should('not.exist');
       cy.url().should('not.include', '/ingredients/643d69a5c3f7b9001cfa0941');
     });
+    it('При нажатии Esc окно закрывается и происходит возврат на предыдущий url', () => {
+      cy.wait('@getIngredients');
+      cy.contains(
+        '[data-cy=ingredient]',
+        'Биокотлета из марсианской Магнолии'
+      ).click();
+      cy.get('[data-cy="modal"]').should('be.visible');
+      cy.get('body').type('{esc}', { force: true });
+
+      cy.get('[data-cy="modal"]').should('not.exist');
+      cy.url().should('not.include', '/ingredients/643d69a5c3f7b9001cfa0941');
+    });
   });
   describe('Тестирование создания заказа', () => {
     beforeEach(() => {
@@ -168,7 +180,7 @@ describe('Конструктор бургеров', () => {
       });
     });
 
-    it('Модальное окно закрывется по крестику и, после закрытия, в коснтрукторе не остается ингредиентов', () => {
+    it('Модальное окно закрывется по крестику, и, после закрытия, в коснтрукторе не остается ингредиентов', () => {
       cy.wait('@getIngredients');
       cy.contains('[data-cy=ingredient]', 'Флюоресцентная булка R2-D3')
         .find('button')
@@ -195,7 +207,7 @@ describe('Конструктор бургеров', () => {
       cy.get('[data-cy="constructor-ingredient"]').should('not.exist');
     });
 
-    it('Модальное окно закрывется по клику по оврелею и, после закрытия, в коснтрукторе не остается ингредиентов', () => {
+    it('Модальное окно закрывется по клику по оврелею, и, после закрытия, в коснтрукторе не остается ингредиентов', () => {
       cy.wait('@getIngredients');
       cy.contains('[data-cy=ingredient]', 'Флюоресцентная булка R2-D3')
         .find('button')
@@ -215,6 +227,33 @@ describe('Конструктор бургеров', () => {
       cy.get('[data-cy="modal"]').should('be.visible');
 
       cy.get('[data-cy="modal-overlay"]').click({ force: true });
+      cy.get('[data-cy="modal"]').should('not.exist');
+
+      cy.get('[data-cy*="bun_top"]').should('not.exist');
+      cy.get('[data-cy*="bun_bottom"]').should('not.exist');
+      cy.get('[data-cy="constructor-ingredient"]').should('not.exist');
+    });
+
+    it('Модальное окно закрывется при нажатии Esc, и, после закрытия, в коснтрукторе не остается ингредиентов', () => {
+      cy.wait('@getIngredients');
+      cy.contains('[data-cy=ingredient]', 'Флюоресцентная булка R2-D3')
+        .find('button')
+        .click();
+      cy.contains(
+        '[data-cy=ingredient]',
+        'Филе Люминесцентного тетраодонтимформа'
+      )
+        .find('button')
+        .click();
+
+      cy.get('[data-cy=submit-order--button]').click();
+
+      cy.wait('@getUser');
+      cy.wait('@createOrder');
+
+      cy.get('[data-cy="modal"]').should('be.visible');
+
+      cy.get('body').type('{esc}', { force: true });
       cy.get('[data-cy="modal"]').should('not.exist');
 
       cy.get('[data-cy*="bun_top"]').should('not.exist');

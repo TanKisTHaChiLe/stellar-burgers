@@ -63,7 +63,12 @@ describe('Тестирование userSlice', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
-
+  afterEach(() => {
+    mockLocalStorage.removeItem('accessToken');
+    mockLocalStorage.removeItem('refreshToken');
+    mockCookie.deleteCookie('accessToken');
+    mockCookie.deleteCookie('refreshToken');
+  });
   describe('Тестирование экшена fetchLogin', () => {
     it('Если экшен fetchLogin в состоянии pending, то isloading: true', () => {
       const login = jest
